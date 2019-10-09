@@ -17,3 +17,28 @@ end
 lane :uploadToCrashlytics do
     crashlytics(notifications: true)
 end
+
+lane :slackNotifySuccess do |options|
+
+end
+
+lane :slackNotifyFailure do
+    slack(
+        username: "Android",
+        icon_url: "http://icons.iconarchive.com/icons/danleech/simple/1024/android-icon.png",
+        message: "New build is available!",
+        success: false,
+        slack_url: "https://hooks.slack.com/services/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"
+    )
+end
+
+after_all do |lane, options|
+    slack(
+            username: "Android",
+            icon_url: "http://icons.iconarchive.com/icons/danleech/simple/1024/android-icon.png",
+            message: "#{options[:build_config]} build is available! https://fabric.io/_/beta",
+            success: true,
+            default_payloads: [:git_branch, :git_author],
+            slack_url: "https://hooks.slack.com/services/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"
+        )
+  end

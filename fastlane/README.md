@@ -40,6 +40,16 @@ fastlane buildRelease
 fastlane uploadToCrashlytics
 ```
 
+### slackNotifySuccess
+```
+fastlane slackNotifySuccess
+```
+
+### slackNotifyFailure
+```
+fastlane slackNotifyFailure
+```
+
 
 ----
 
