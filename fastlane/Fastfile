@@ -1,27 +1,12 @@
-
 desc "Runs all the tests"
 lane :test do
-gradle(
-    task: "test",
-    gradle_path: "gradlew"
-)
-end
-
-desc "Submit a new Beta Build to Crashlytics Beta"
-lane :beta do
-gradle(task: "clean assembleRelease")
-crashlytics
-
-# sh "your_script.sh"
-# You can also use other beta testing services here
-end
-
-desc "Deploy a new version to the Google Play"
-lane :deploy do
-gradle(task: "clean assembleRelease")
-end
-
-desc "Just build debug version"
-lane :makeDebug do
-  gradle(task: "clean assembleDebug")
+    gradle(task: "test")
+    gradle(task: "clean assembleDebug")
+    crashlytics(
+        api_token: "f33c7827bdd4856afae9646afa6974dcdadaf096",
+        build_secret: "3ae4e85a639c908a2c4ffe38eae2a41561cf4cd1b1ac4683d1d763e0f60dca0e",
+        apk_path: "app/build/outputs/apk/debug/app-debug.apk",
+        groups: "fastlane-demo-testers",
+        notifications: true
+    )
 end
