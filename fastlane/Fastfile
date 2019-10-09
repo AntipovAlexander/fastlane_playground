@@ -16,7 +16,6 @@ end
 
 lane :uploadToCrashlytics do
  crashlytics(
-        apk_path: "app/build/outputs/apk/debug/app-debug.apk",
         groups: "fastlane-demo-testers",
         notifications: true
     )
