@@ -1,4 +1,4 @@
-lane :runRests do
+lane :runTests do
     gradle(task: "test")
 end
 
