@@ -18,7 +18,7 @@ lane :uploadToCrashlytics do
     crashlytics(notifications: true)
 end
 
-after_all do |lane, options|
+lane :reportSlack do |options|
     slack(
             username: "Android",
             icon_url: "http://icons.iconarchive.com/icons/danleech/simple/1024/android-icon.png",
