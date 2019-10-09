@@ -1,5 +1,3 @@
-ENV["BUILD_CONFIG"] = "123abc"
-
 lane :makeBuild do |options|
     gradle(task: "test")
 
