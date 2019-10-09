@@ -3,14 +3,17 @@ lane :makeBuild do |options|
 
     if options[:debug]
         gradle(task: "clean assembleDebug")
+        ENV["BUILD_NAME"] = "Debug"
     end
 
     if options[:staging]
         gradle(task: "clean assembleStaging")
+        ENV["BUILD_NAME"] = "Staging"
     end
 
     if options[:release]
         gradle(task: "clean assembleRelease")
+        ENV["BUILD_NAME"] = "Release"
     end
 end
 
@@ -19,7 +22,7 @@ after_all do |lane, options|
     slack(
             username: "Android",
             icon_url: "http://icons.iconarchive.com/icons/danleech/simple/1024/android-icon.png",
-            message: "#{options[:build_config]} build is available!\n https://fabric.io/_/beta",
+            message: "#{ENV["BUILD_NAME"]} build is available!\n https://fabric.io/_/beta",
             success: true,
             default_payloads: [:git_branch, :git_author]
     )

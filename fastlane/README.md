@@ -15,29 +15,9 @@ Install _fastlane_ using
 or alternatively using `brew cask install fastlane`
 
 # Available Actions
-### runTests
+### makeBuild
 ```
-fastlane runTests
-```
-
-### buildDebug
-```
-fastlane buildDebug
-```
-
-### buildStaging
-```
-fastlane buildStaging
-```
-
-### buildRelease
-```
-fastlane buildRelease
-```
-
-### uploadToCrashlytics
-```
-fastlane uploadToCrashlytics
+fastlane makeBuild
 ```
 
 
