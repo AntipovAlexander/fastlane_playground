@@ -1,5 +1,5 @@
 desc "Runs all the tests"
-lane :test do
+lane :testAndDeploy do
     gradle(task: "test")
     gradle(task: "clean assembleDebug")
     crashlytics(
