@@ -15,22 +15,26 @@ Install _fastlane_ using
 or alternatively using `brew cask install fastlane`
 
 # Available Actions
-## Android
-### android test
+### test
 ```
-fastlane android test
+fastlane test
 ```
 Runs all the tests
-### android beta
+### beta
 ```
-fastlane android beta
+fastlane beta
 ```
 Submit a new Beta Build to Crashlytics Beta
-### android deploy
+### deploy
 ```
-fastlane android deploy
+fastlane deploy
 ```
 Deploy a new version to the Google Play
+### makeDebug
+```
+fastlane makeDebug
+```
+Just build debug version
 
 ----
 
