@@ -21,15 +21,44 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        release {
+            storeFile file('keys/fastlane.release')
+            storePassword '111111'
+            keyAlias 'fastlane'
+            keyPassword '111111'
+        }
+
+        debug {
+            storeFile file('keys/debug.keystore')
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storePassword 'android'
+        }
+    }
+
+
     buildTypes {
         release {
             debuggable false
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            resValue "string", "string_resource", "Hi! I am string from RELEASE environment!"
+        }
+        staging {
+            debuggable true
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            resValue "string", "string_resource", "Hi! I am string from STAGING environment!"
         }
         debug {
             debuggable true
             minifyEnabled false
+            signingConfig signingConfigs.debug
+            resValue "string", "string_resource", "Hi! I am string from DEBUG environment!"
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
