@@ -1,19 +1,26 @@
-lane :runTests do
+lane :makeBuild do |options|
     gradle(task: "test")
+
+    if options[:debug]
+        gradle(task: "clean assembleDebug")
+    end
+
+    if options[:staging]
+        gradle(task: "clean assembleStaging")
+    end
+
+    if options[:release]
+        gradle(task: "clean assembleRelease")
+    end
 end
 
-lane :buildDebug do
-    gradle(task: "clean assembleDebug")
-end
-
-lane :buildStaging do
-    gradle(task: "clean assembleStaging")
-end
-
-lane :buildRelease do
-    gradle(task: "clean assembleRelease")
-end
-
-lane :uploadToCrashlytics do
+after_all do |lane, options|
     crashlytics(notifications: true)
+    slack(
+            username: "Android",
+            icon_url: "http://icons.iconarchive.com/icons/danleech/simple/1024/android-icon.png",
+            message: "#{options[:build_config]} build is available!\n https://fabric.io/_/beta",
+            success: true,
+            default_payloads: [:git_branch, :git_author]
+    )
 end
