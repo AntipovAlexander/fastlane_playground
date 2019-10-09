@@ -15,8 +15,5 @@ lane :buildRelease do
 end
 
 lane :uploadToCrashlytics do
- crashlytics(
-        groups: "fastlane-demo-testers",
-        notifications: true
-    )
+    crashlytics(notifications: true)
 end
