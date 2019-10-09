@@ -37,4 +37,9 @@ platform :android do
   lane :deploy do
     gradle(task: "clean assembleRelease")
   end
+
+  desc "Just build debug version"
+    lane :makeDebug do
+      gradle(task: "clean assembleDebug")
+    end
 end
