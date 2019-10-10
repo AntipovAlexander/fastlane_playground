@@ -1,20 +1,43 @@
 lane :makeBuild do |options|
-    gradle(task: "test")
-
-    if options[:debug]
-        gradle(task: "clean assembleDebug")
-        ENV["BUILD_NAME"] = "Debug"
+    begin
+        gradle(task: "test")
+        makeBuild(options[:buildType])
+    rescue => exception
+        onError(exception, options[:buildType])
+        exit(false)
     end
+end
 
-    if options[:staging]
-        gradle(task: "clean assembleStaging")
-        ENV["BUILD_NAME"] = "Staging"
-    end
+def makeBuild(buildType)
+    case buildType
+        when "debug"
+            gradle(task: "clean assembleDebug")
+        when "staging"
+            gradle(task: "clean assembleStaging")
+        when "release"
+            gradle(task: "clean assembleRelease")
+        else
+            raise ArgumentError, "You need to pass build type as parameter. Like this: buildType:release. Available build types: debug, staging, release"
+        end
+end
 
-    if options[:release]
-        gradle(task: "clean assembleRelease")
-        ENV["BUILD_NAME"] = "Release"
-    end
+def onError(exception, buildType)
+   slack(
+       username: "Android",
+       icon_url: "http://icons.iconarchive.com/icons/danleech/simple/1024/android-icon.png",
+       message: "#{buildType} build is failed!",
+       success: false,
+       default_payloads: [:git_branch, :git_author],
+       attachment_properties: {
+           fields: [
+               {
+                   title: "Error message",
+                   value: exception.to_s,
+                   short: false
+               }
+           ]
+       }
+   )
 end
 
 after_all do |lane, options|
@@ -22,7 +45,7 @@ after_all do |lane, options|
     slack(
             username: "Android",
             icon_url: "http://icons.iconarchive.com/icons/danleech/simple/1024/android-icon.png",
-            message: "#{ENV["BUILD_NAME"]} build is available!\n https://fabric.io/_/beta",
+            message: "#{options[:buildType]} build is available!\n https://fabric.io/_/beta",
             success: true,
             default_payloads: [:git_branch, :git_author]
     )
