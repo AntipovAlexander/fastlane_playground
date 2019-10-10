@@ -1,19 +1,47 @@
-lane :runTests do
+lane :makeBuild do |options|
     gradle(task: "test")
+    makeBuild(options[:buildType])
 end
 
-lane :buildDebug do
-    gradle(task: "clean assembleDebug")
+def makeBuild(buildType)
+    case buildType
+        when "debug"
+            gradle(task: "clean assembleDebug")
+        when "staging"
+            gradle(task: "clean assembleStaging")
+        when "release"
+            gradle(task: "clean assembleRelease")
+        else
+            raise ArgumentError, "You need to pass build type as parameter. Like this: buildType:release. Available build types: debug, staging, release"
+        end
 end
 
-lane :buildStaging do
-    gradle(task: "clean assembleStaging")
+error do |lane, exception, options|
+   slack(
+          username: "Android",
+          icon_url: "http://icons.iconarchive.com/icons/danleech/simple/1024/android-icon.png",
+          message: "#{options[:buildType]} build is failed!",
+          success: false,
+          default_payloads: [:git_branch, :git_author],
+          attachment_properties: {
+              fields: [
+                  {
+                      title: "Error message",
+                      value: exception.to_s,
+                      short: false
+                  }
+              ]
+          }
+      )
 end
 
-lane :buildRelease do
-    gradle(task: "clean assembleRelease")
-end
-
-lane :uploadToCrashlytics do
+after_all do |lane, options|
     crashlytics(notifications: true)
+    slack(
+            username: "Android",
+            icon_url: "http://icons.iconarchive.com/icons/danleech/simple/1024/android-icon.png",
+            message: "#{options[:buildType]} build is available!\n https://fabric.io/_/beta",
+            success: true,
+            default_payloads: [:git_branch, :git_author]
+    )
 end
