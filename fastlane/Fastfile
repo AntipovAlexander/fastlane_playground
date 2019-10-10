@@ -17,26 +17,22 @@ def makeBuild(buildType)
 end
 
 error do |exception, options|
-    onError(exception, options[:buildType])
-end
-
-def onError(exception, buildType)
    slack(
-       username: "Android",
-       icon_url: "http://icons.iconarchive.com/icons/danleech/simple/1024/android-icon.png",
-       message: "#{buildType} build is failed!",
-       success: false,
-       default_payloads: [:git_branch, :git_author],
-       attachment_properties: {
-           fields: [
-               {
-                   title: "Error message",
-                   value: exception.to_s,
-                   short: false
-               }
-           ]
-       }
-   )
+          username: "Android",
+          icon_url: "http://icons.iconarchive.com/icons/danleech/simple/1024/android-icon.png",
+          message: "#{options[:buildType]} build is failed!",
+          success: false,
+          default_payloads: [:git_branch, :git_author],
+          attachment_properties: {
+              fields: [
+                  {
+                      title: "Error message",
+                      value: exception.to_s,
+                      short: false
+                  }
+              ]
+          }
+      )
 end
 
 after_all do |lane, options|
