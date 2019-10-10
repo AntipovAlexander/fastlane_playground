@@ -3,6 +3,7 @@ lane :makeBuild do |options|
         gradle(task: "test")
         makeBuild(options[:buildType])
     rescue => exception
+        say "exception! #{exception.to_s}"
         onError(exception, options[:buildType])
         exit(false)
     end
