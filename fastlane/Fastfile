@@ -1,11 +1,6 @@
 lane :makeBuild do |options|
-    begin
-        gradle(task: "test")
-        makeBuild(options[:buildType])
-    rescue => exception
-        onError(exception, options[:buildType])
-        exit(false)
-    end
+    gradle(task: "test")
+    makeBuild(options[:buildType])
 end
 
 def makeBuild(buildType)
@@ -21,8 +16,8 @@ def makeBuild(buildType)
         end
 end
 
-error do |lane, exception|
-    onError(exception, "")
+error do |exception, options|
+    onError(exception, options[:buildType])
 end
 
 def onError(exception, buildType)
